@@ -1,5 +1,15 @@
 參考來源: fauria/vsftpd
 
+1. 讀取 initdata/virtual_users.txt
+   內容格式:  
+       <account-1>
+       <pwd-1>
+       <account-2>
+       <pwd-2>
+2. docker exec -it vsftp sh ./etc/vsftpd/createusers.sh
+
+
+
 # Purpose
 
 This Docker image is inpired by Docker images to merge all their fonctionalities in one unique image:
@@ -7,7 +17,7 @@ This Docker image is inpired by Docker images to merge all their fonctionalities
 
 This Docker container implements a vsftpd server, with the following features:
 
- * Rocky Linux 8 base image.
+ * Change Image: Rocky Linux 8 base image.
  * vsftpd 3.0
  * Virtual users
  * Passive mode
