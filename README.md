@@ -6,7 +6,8 @@
        <pwd-1>
        <account-2>
        <pwd-2>
-2. docker exec -it vsftp sh ./etc/vsftpd/createusers.sh
+2. 建立空白檔: touch initdata/virtual_users.db
+3. docker exec -it vsftp sh ./etc/vsftpd/createusers.sh
 
 
 

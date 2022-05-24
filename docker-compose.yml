@@ -4,6 +4,7 @@ version: '3.7'
 
 services:
   vsftp:
+    build: .
     image: canmeng/vsftpd:v1
     container_name: vsftp
     hostname: vsftp
@@ -12,8 +13,8 @@ services:
     env_file:
       - vsftpd.env
 
-    networks:
-      - web
+    # networks:
+    #   - web
 
     ports:
       - '${HOST_IP4}:20-21:20-21'
@@ -42,6 +43,6 @@ services:
       - ./logs:/var/log/vsftpd
       - ./data:/home/vsftpd
 
-networks:
-  web:
-    external: true
+# networks:
+#   web:
+#     external: true
