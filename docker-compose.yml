@@ -1,19 +1,47 @@
-version: "3"
+# docker exec -it vsftp sh ./etc/vsftpd/createusers.sh
+
+version: '3.7'
 
 services:
+  vsftp:
+    image: canmeng/vsftpd:v1
+    container_name: vsftp
+    hostname: vsftp
+    restart: unless-stopped
 
-  vsftpd:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-      args:
-        USER_ID: 1000
-        GROUP_ID: 1000
-    restart: always
+    env_file:
+      - vsftpd.env
+
+    networks:
+      - web
+
     ports:
-      - 0.0.0.0:20:20
-      - 0.0.0.0:21:21
-      - 21100-21110:21100-21110
+      - '${HOST_IP4}:20-21:20-21'
+      - '${HOST_IP4}:${PASV_MIN_PORT}-${PASV_MAX_PORT}:${PASV_MIN_PORT}-${PASV_MAX_PORT}'
+
+    environment:
+      PASV_ADDRESS: '${HOST_IP4}'
+      PASV_ADDR_RESOLVE: 'NO'
+      PASV_ENABLE: 'YES'
+      PASV_MIN_PORT: ${PASV_MIN_PORT}
+      PASV_MAX_PORT: ${PASV_MAX_PORT}
+      XFERLOG_STD_FORMAT: 'NO'
+      LOG_STDOUT: 'Y'
+      FILE_OPEN_MODE: '0666'
+      LOCAL_UMASK: '022' #'077'
+      PASV_PROMISCUOUS: 'NO'
+      PORT_PROMISCUOUS: 'NO'
+      SSL_ENABLE: 'NO'
+      
+
     volumes:
-      - ./home:/home/vsftpd
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./initdata/virtual_users.txt:/etc/vsftpd/virtual_users.txt:ro
+      - ./initdata/virtual_users.db:/etc/vsftpd/virtual_users.db:rw
       - ./logs:/var/log/vsftpd
+      - ./data:/home/vsftpd
+
+networks:
+  web:
+    external: true
