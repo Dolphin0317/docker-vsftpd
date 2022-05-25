@@ -32,8 +32,10 @@ services:
       LOCAL_UMASK: '022' #'077'
       PASV_PROMISCUOUS: 'NO'
       PORT_PROMISCUOUS: 'NO'
+      RESERVE_LOOKUP_ENABLE: 'NO' #關閉反解，加速登入
       SSL_ENABLE: 'NO'
-      
+      #TLS_CERT: 'canmeng.com.cer'
+      #TLS_KEY: 'canmeng.com.key'
 
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -42,6 +44,8 @@ services:
       - ./initdata/virtual_users.db:/etc/vsftpd/virtual_users.db:rw
       - ./logs:/var/log/vsftpd
       - ./data:/home/vsftpd
+      #- ${TLS_PATH}/canmeng.com.cer:/etc/vsftpd/cert/canmeng.com.cer:ro
+      #- ${TLS_PATH}/canmeng.com.key:/etc/vsftpd/cert/canmeng.com.key:ro
 
 # networks:
 #   web:
